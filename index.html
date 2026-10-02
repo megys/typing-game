@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#123c35" />
+    <meta name="description" content="Race through a first cafe shift in Korea by taking and calling out orders in Korean." />
+    <title>Jamo Cafe | Korean order rush</title>
+    <link rel="stylesheet" href="./styles.css?v=10" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Restart Jamo Cafe">
+          <span class="brand-mark" aria-hidden="true">ㅈ</span>
+          <span>Jamo Cafe</span>
+        </a>
+        <div class="session-controls">
+          <div class="difficulty-switch" role="group" aria-label="Shift length">
+            <button class="difficulty-button" type="button" data-difficulty="easy" aria-pressed="false">Easy</button>
+            <button class="difficulty-button" type="button" data-difficulty="medium" aria-pressed="true">Medium</button>
+            <button class="difficulty-button" type="button" data-difficulty="hard" aria-pressed="false">Rush</button>
+          </div>
+          <div class="mode-switch" role="group" aria-label="Typing mode">
+            <button class="mode-button is-active" type="button" data-mode="hangul" aria-pressed="true">한글</button>
+            <button class="mode-button" type="button" data-mode="english" aria-pressed="false">ABC</button>
+          </div>
+          <button class="quiet-button" id="keyboard-help" type="button">Keys</button>
+          <button class="quiet-button" id="pause-button" type="button" disabled>Pause</button>
+          <button class="quiet-button" id="restart-button" type="button">Restart</button>
+        </div>
+      </header>
+
+      <section class="scene" aria-labelledby="cafe-title">
+        <div class="cafe-banner">
+          <img src="./assets/cafe-window.svg" alt="A neighborhood cafe in Seoul" />
+          <div class="location-stamp">
+            <span>서울 · 연남동</span>
+            <strong id="cafe-title">Jamo Coffee</strong>
+          </div>
+          <div class="shift-board" aria-label="Current shift status">
+            <div><span>Orders out</span><strong id="served-count">0</strong></div>
+            <div><span>Missed</span><strong id="failed-count">0</strong></div>
+            <div><span>Streak</span><strong id="streak-count">0</strong></div>
+            <time id="timer" datetime="PT105S">01:45</time>
+          </div>
+        </div>
+
+        <section class="ready-screen" id="ready-screen">
+          <p class="eyebrow">Your first shift · 첫 출근</p>
+          <h1>Counter’s yours.</h1>
+          <p>The door is unlocked. Your apron is tied. Someone is already walking in.</p>
+          <button class="primary-button" id="clock-in-button" type="button">Clock in</button>
+        </section>
+
+        <div class="game-stage" id="game-stage" hidden>
+          <div class="room front-room" id="front-room">
+            <aside class="customer-panel" aria-label="Customer">
+              <div class="customer-portrait" id="customer-portrait" data-color="coral">손</div>
+              <div>
+                <p class="panel-label">Cafe front · 카운터</p>
+                <h2>손님</h2>
+              </div>
+            </aside>
+
+            <div class="front-work-slot" id="front-work-slot">
+              <section class="work-panel" id="work-panel" aria-label="Current action">
+                <p class="task-cue" id="task-cue">Take the order</p>
+                <div class="customer-dialogue" id="customer-dialogue">
+                  <p class="customer-line" id="customer-line" lang="ko">아이스 아메리카노 주세요.</p>
+                  <p class="customer-translation" id="customer-translation">One iced Americano, please.</p>
+                </div>
+                <p class="translation" id="translation" aria-live="polite"></p>
+                <div class="target-line" id="target-line" aria-label="Text to type"></div>
+                <div class="front-order-slot" id="front-order-slot">
+                  <div class="order-ticket" id="order-ticket" aria-label="Written order">
+                    <span id="order-ticket-number">ORDER 01</span>
+                    <strong id="order-note-text">Start writing...</strong>
+                    <div id="notepad-input-slot"></div>
+                  </div>
+                </div>
+                <div id="work-input-slot">
+                  <div class="input-wrap" id="input-wrap">
+                    <label class="input-label" id="input-label" for="typing-input">Write down the order</label>
+                    <span class="input-row">
+                      <input
+                        id="typing-input"
+                        type="text"
+                        lang="ko"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        enterkeyhint="send"
+                      />
+                      <button class="say-button" id="action-button" type="button">Take order</button>
+                    </span>
+                    <span class="input-meta">
+                      <span class="composition-state" id="composition-state" aria-live="polite"></span>
+                      <label class="keyboard-visibility-control" id="keyboard-visibility-control">
+                        <span>Keyboard</span>
+                        <input id="keyboard-visibility-toggle" type="checkbox" role="switch" checked />
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                <div class="barista-bubble">
+                  <span>You</span>
+                  <p id="barista-speech">주문을 정확히 적어 주세요.</p>
+                </div>
+              </section>
+            </div>
+
+          </div>
+
+          <section class="room kitchen-room" id="kitchen-room" hidden aria-labelledby="kitchen-title">
+            <header class="kitchen-header">
+              <div>
+                <p class="eyebrow">Back room · 주방</p>
+                <h2 id="kitchen-title">Make the <span id="kitchen-drink">Iced Americano</span></h2>
+              </div>
+              <button class="primary-button recipe-book-button" id="recipe-book-button" type="button">Recipe book</button>
+            </header>
+
+            <div class="kitchen-layout">
+              <div class="tool-bench" role="group" aria-label="Kitchen tools">
+                <p class="counter-hint">Kitchen counter · 작업대</p>
+                <div class="kitchen-order-slot" id="kitchen-order-slot" aria-label="Kitchen order note"></div>
+                <button class="tool-button tool-mug" type="button" data-tool="mug" data-tool-name="mug" aria-label="Mug: grab mug">
+                  <span class="tool-phrase" lang="ko">머그잔을 가져와요</span>
+                  <img src="assets/mug.svg" alt="" />
+                  <strong>Mug</strong>
+                </button>
+                <button class="tool-button tool-glass" type="button" data-tool="clear-cup" data-tool-name="tall glass" aria-label="Tall glass: grab tall glass">
+                  <span class="tool-phrase" lang="ko">투명 컵을 가져와요</span>
+                  <img src="assets/tall-glass.svg" alt="" />
+                  <strong>Tall glass</strong>
+                </button>
+                <button class="tool-button tool-coffee" type="button" data-tool="coffee" data-tool-name="espresso machine" aria-label="Espresso machine: make coffee">
+                  <span class="tool-phrase" lang="ko">커피를 내려요</span>
+                  <img src="assets/espresso-machine.svg" alt="" />
+                  <strong>Espresso machine</strong>
+                </button>
+                <button class="tool-button tool-hot-water" type="button" data-tool="hot-water" data-tool-name="hot water" aria-label="Hot water: pour hot water">
+                  <span class="tool-phrase" lang="ko">뜨거운 물을 부어요</span>
+                  <img src="assets/water-pitcher.svg" alt="" />
+                  <strong>Hot water</strong>
+                </button>
+                <button class="tool-button tool-sink" id="discard-drink-button" type="button" data-tool="discard" data-tool-name="sink" aria-label="Sink: throw away drink" disabled>
+                  <span class="tool-phrase" lang="ko">음료를 버려요</span>
+                  <img src="assets/sink.svg" alt="" />
+                  <strong>Sink</strong>
+                </button>
+                <button class="tool-button category-tool tool-tea" type="button" data-category="tea" aria-label="Open tea selection">
+                  <img src="assets/tea-caddy.svg" alt="" />
+                  <strong>Tea · 차</strong>
+                </button>
+                <button class="tool-button category-tool tool-syrup" type="button" data-category="syrup" aria-label="Open syrup selection">
+                  <img src="assets/syrup-rack.svg" alt="" />
+                  <strong>Syrups · 시럽</strong>
+                </button>
+                <button class="tool-button category-tool tool-fridge" type="button" data-category="fridge" aria-label="Open fridge selection">
+                  <img src="assets/milk-fridge.svg" alt="" />
+                  <strong>Fridge · 냉장고</strong>
+                </button>
+                <button class="tool-button category-tool tool-extras" type="button" data-category="topping" aria-label="Open extras selection">
+                  <img src="assets/extras-tray.svg" alt="" />
+                  <strong>Extras · 추가</strong>
+                </button>
+              </div>
+
+              <aside class="kitchen-status" aria-label="Completed drink actions">
+                <p class="panel-label">On the bar</p>
+                <div class="kitchen-cup is-empty" id="kitchen-cup" aria-label="No cup selected">
+                  <span class="drink-fill" aria-hidden="true"></span>
+                  <span class="ice-cubes" aria-hidden="true"><i></i><i></i><i></i></span>
+                  <span class="kitchen-cup-logo">ㅈ</span>
+                </div>
+                <ol id="kitchen-progress"></ol>
+                <button class="serve-drink-button" id="serve-drink-button" type="button" disabled>Serve drink</button>
+              </aside>
+            </div>
+            <div class="kitchen-action-overlay" id="kitchen-action-overlay" hidden>
+              <section class="kitchen-action-dialog" role="dialog" aria-label="Kitchen action">
+                <button class="popup-close" id="close-kitchen-action" type="button" aria-label="Cancel action" title="Cancel action">×</button>
+                <div class="kitchen-console" id="kitchen-work-slot"></div>
+              </section>
+            </div>
+          </section>
+        </div>
+
+        <section class="summary" id="summary" hidden aria-labelledby="summary-title">
+          <p class="eyebrow">Closing time · 마감</p>
+          <h1 id="summary-title">Shift complete.</h1>
+          <p>You kept the counter moving.</p>
+          <dl class="results">
+            <div><dt>Orders out</dt><dd id="order-result">0</dd></div>
+            <div><dt>Missed</dt><dd id="failed-result">0</dd></div>
+            <div><dt>Accuracy</dt><dd id="accuracy-result">100%</dd></div>
+            <div><dt>Best streak</dt><dd id="best-streak-result">0</dd></div>
+          </dl>
+          <button class="primary-button" id="replay-button" type="button">Work another shift</button>
+        </section>
+
+        <section class="order-outcome" id="order-outcome" data-result="success" hidden aria-live="assertive">
+          <div class="confetti" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <p class="eyebrow" id="outcome-korean">잘했어요!</p>
+          <h2 id="outcome-title">Order out!</h2>
+          <p id="outcome-detail">The drink was handed off successfully.</p>
+          <button class="primary-button" id="next-order-button" type="button">Next customer</button>
+        </section>
+
+        <div class="paused-overlay" id="paused-overlay" hidden>
+          <strong>On break</strong>
+          <button class="primary-button" id="resume-button" type="button">Back to the counter</button>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="keyboard-dialog">
+      <form method="dialog" class="dialog-header">
+        <div><p class="eyebrow">Hangul input</p><h2>Korean keyboard</h2></div>
+        <button class="close-button" type="submit">Close</button>
+      </form>
+      <p>Keep your keyboard set to English. Each physical key maps to the standard Korean two-set layout.</p>
+      <label class="input-method-toggle">
+        <span><strong>Built-in Korean keyboard</strong><small>Turn this off to use your device's Korean keyboard.</small></span>
+        <input id="hangul-input-toggle" type="checkbox" role="switch" checked />
+      </label>
+      <div class="keyboard-map" aria-label="Korean two-set keyboard rows">
+        <p class="keyboard-legend"><span>Shift</span> Double consonant</p>
+        <div><kbd data-key="Q"><small>ㅃ</small><span>ㅂ</span></kbd><kbd data-key="W"><small>ㅉ</small><span>ㅈ</span></kbd><kbd data-key="E"><small>ㄸ</small><span>ㄷ</span></kbd><kbd data-key="R"><small>ㄲ</small><span>ㄱ</span></kbd><kbd data-key="T"><small>ㅆ</small><span>ㅅ</span></kbd><kbd data-key="Y">ㅛ</kbd><kbd data-key="U">ㅕ</kbd><kbd data-key="I">ㅑ</kbd><kbd data-key="O">ㅐ</kbd><kbd data-key="P">ㅔ</kbd></div>
+        <div><kbd data-key="A">ㅁ</kbd><kbd data-key="S">ㄴ</kbd><kbd data-key="D">ㅇ</kbd><kbd data-key="F">ㄹ</kbd><kbd data-key="G">ㅎ</kbd><kbd data-key="H">ㅗ</kbd><kbd data-key="J">ㅓ</kbd><kbd data-key="K">ㅏ</kbd><kbd data-key="L">ㅣ</kbd></div>
+        <div><kbd data-key="Z">ㅋ</kbd><kbd data-key="X">ㅌ</kbd><kbd data-key="C">ㅊ</kbd><kbd data-key="V">ㅍ</kbd><kbd data-key="B">ㅠ</kbd><kbd data-key="N">ㅜ</kbd><kbd data-key="M">ㅡ</kbd></div>
+      </div>
+    </dialog>
+
+    <dialog id="recipe-dialog" class="recipe-dialog">
+      <form method="dialog" class="dialog-header">
+        <div><p class="eyebrow">Kitchen reference · 조리법</p><h2>Recipe book</h2></div>
+        <button class="close-button" type="submit">Close</button>
+      </form>
+      <div class="recipe-book" id="recipe-book"></div>
+      <nav class="recipe-pagination" aria-label="Recipe pages">
+        <button id="previous-recipe" type="button" aria-label="Previous recipe">←</button>
+        <span id="recipe-page-number"></span>
+        <button id="next-recipe" type="button" aria-label="Next recipe">→</button>
+      </nav>
+    </dialog>
+
+    <dialog id="ingredient-dialog" class="ingredient-dialog">
+      <form method="dialog" class="dialog-header">
+        <div><p class="eyebrow">Choose an ingredient · 재료</p><h2 id="ingredient-dialog-title">Choose</h2></div>
+        <button class="close-button" type="submit">Close</button>
+      </form>
+      <div class="ingredient-grid" id="ingredient-grid"></div>
+    </dialog>
+
+    <script type="module" src="./src/main.js?v=12"></script>
+  </body>
+</html>

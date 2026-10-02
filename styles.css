@@ -1,0 +1,2399 @@
+:root {
+  color-scheme: light;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: #182321;
+  background: #dbe0d8;
+  font-synthesis: none;
+  --ink: #182321;
+  --forest: #17312f;
+  --paper: #f4f0e7;
+  --paper-deep: #e6dfd1;
+  --coral: #d9573f;
+  --coral-dark: #a93727;
+  --mint: #79a99a;
+  --line: #b7b8aa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    linear-gradient(90deg, rgba(23, 49, 47, 0.05) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(rgba(23, 49, 47, 0.05) 1px, transparent 1px) 0 0 / 32px 32px,
+    #dbe0d8;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid #f2a65a;
+  outline-offset: 3px;
+}
+
+.app-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 18px 0 36px;
+}
+
+.topbar {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--forest);
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--paper);
+  background: var(--coral);
+  border: 2px solid var(--ink);
+}
+
+.session-controls,
+.mode-switch,
+.difficulty-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mode-switch,
+.difficulty-switch {
+  padding: 3px;
+  background: rgba(244, 240, 231, 0.75);
+  border: 1px solid var(--line);
+}
+
+.difficulty-button,
+.mode-button,
+.quiet-button,
+.close-button {
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid transparent;
+  color: var(--forest);
+  background: transparent;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.difficulty-button.is-active,
+.mode-button.is-active {
+  color: var(--paper);
+  background: var(--forest);
+}
+
+.quiet-button:hover,
+.close-button:hover {
+  border-color: var(--line);
+  background: rgba(244, 240, 231, 0.7);
+}
+
+.quiet-button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.scene {
+  position: relative;
+  min-height: min(760px, calc(100vh - 112px));
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 9px 9px 0 rgba(23, 49, 47, 0.18);
+}
+
+.scene-art {
+  position: relative;
+  height: clamp(180px, 29vh, 280px);
+  overflow: hidden;
+  background: #7d9c93;
+  border-bottom: 2px solid var(--ink);
+}
+
+.scene-art img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.location-stamp {
+  position: absolute;
+  left: clamp(18px, 4vw, 48px);
+  bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  color: var(--paper);
+  background: rgba(23, 49, 47, 0.92);
+  border-left: 5px solid var(--coral);
+}
+
+.location-stamp span {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.location-stamp strong {
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: 1.35rem;
+}
+
+.scene-status {
+  height: 46px;
+  display: grid;
+  grid-template-columns: auto minmax(100px, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 0 clamp(18px, 4vw, 48px);
+  color: #55615e;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.progress-track {
+  height: 4px;
+  overflow: hidden;
+  background: var(--paper-deep);
+}
+
+.progress-track span {
+  width: 0;
+  height: 100%;
+  display: block;
+  background: var(--coral);
+  transition: width 300ms ease;
+}
+
+.dialogue-stage {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: clamp(22px, 5vw, 64px);
+  padding: clamp(28px, 6vw, 68px) clamp(20px, 7vw, 84px);
+}
+
+.dialogue-stage[hidden] {
+  display: none;
+}
+
+.speaker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  color: var(--forest);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.speaker-portrait {
+  width: 88px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--paper);
+  background: var(--forest);
+  border: 5px solid var(--mint);
+  border-radius: 50%;
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: 2rem;
+}
+
+.dialogue-content {
+  min-width: 0;
+}
+
+.translation,
+.input-note {
+  margin: 0;
+  color: #68716d;
+}
+
+.translation {
+  min-height: 24px;
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+.turn-cue {
+  margin: 0 0 7px;
+  color: var(--coral-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.korean-line {
+  margin: 8px 0 0;
+  color: #596561;
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 1.15rem;
+}
+
+.target-line {
+  min-height: 70px;
+  margin-top: 8px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.target-primary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.target-secondary {
+  color: #68716d;
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: 0.42em;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.target-line[hidden],
+.input-wrap[hidden],
+.input-note[hidden],
+.response-clock[hidden] {
+  display: none;
+}
+
+.response-clock {
+  min-height: 28px;
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: auto minmax(80px, 1fr) 34px;
+  align-items: center;
+  gap: 12px;
+  color: #596561;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.response-track {
+  height: 6px;
+  overflow: hidden;
+  background: var(--paper-deep);
+}
+
+.response-track span {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: var(--mint);
+  transform-origin: left;
+}
+
+.response-clock.is-urgent .response-track span {
+  background: var(--coral);
+}
+
+.character {
+  border-bottom: 3px solid transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.target-word {
+  display: inline-flex;
+  padding-inline: 2px;
+  border-radius: 2px;
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+.target-word--active {
+  background: #e8ebe3;
+  box-shadow: inset 0 -3px #7e8f88;
+}
+
+.target-word--recognized {
+  background: #dcebe3;
+  box-shadow: inset 0 -3px var(--mint);
+}
+
+.target-word--incorrect {
+  background: #f3d6cf;
+  box-shadow: inset 0 -3px var(--coral);
+}
+
+.character--pending {
+  color: #a6aaa3;
+}
+
+.character--correct {
+  color: var(--forest);
+  border-color: var(--mint);
+}
+
+.character--incorrect {
+  color: var(--coral-dark);
+  border-color: var(--coral);
+  background: #f3d6cf;
+}
+
+.target-line--word-feedback .target-word--active .character {
+  color: #68736e;
+  border-color: transparent;
+}
+
+.target-line--word-feedback .target-word--recognized .character {
+  color: var(--forest);
+  border-color: transparent;
+}
+
+.target-line--word-feedback .target-word--incorrect .character {
+  color: var(--coral-dark);
+  border-color: transparent;
+  background: transparent;
+}
+
+.input-wrap {
+  position: relative;
+  margin-top: 20px;
+  display: block;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--forest);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+#typing-input {
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 120px 10px 13px;
+  color: var(--ink);
+  background: #fffdf8;
+  border: 2px solid var(--forest);
+  border-radius: 0;
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 1.35rem;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.input-row #typing-input {
+  padding-right: 13px;
+  border-right: 0;
+}
+
+.say-button {
+  min-width: 88px;
+  padding: 0 16px;
+  color: var(--paper);
+  background: var(--forest);
+  border: 2px solid var(--forest);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+#typing-input.has-error {
+  border-color: var(--coral-dark);
+}
+
+#typing-input.is-complete {
+  border-color: #3f7b68;
+  background: #e4eee8;
+}
+
+.input-meta {
+  min-height: 22px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.composition-state {
+  min-height: 1em;
+  display: block;
+  color: #5b6763;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.keyboard-visibility-control {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #5b6763;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.keyboard-visibility-control[hidden] {
+  display: none;
+}
+
+.keyboard-visibility-control input {
+  width: 34px;
+  height: 19px;
+  margin: 0;
+  appearance: none;
+  position: relative;
+  background: #aebbb5;
+  border: 1px solid #78988f;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+.keyboard-visibility-control input::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: translate 160ms ease;
+}
+
+.keyboard-visibility-control input:checked {
+  background: var(--coral);
+}
+
+.keyboard-visibility-control input:checked::before {
+  translate: 15px 0;
+}
+
+.keyboard-visibility-control input:focus-visible {
+  outline: 2px solid var(--coral-dark);
+  outline-offset: 2px;
+}
+
+.input-note {
+  margin-top: 9px;
+  font-size: 0.78rem;
+}
+
+.conversation-action {
+  min-height: 52px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+}
+
+.response-feedback {
+  margin: 0;
+  color: #596561;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.response-feedback[data-tier="perfect"] {
+  color: #2c7059;
+}
+
+.response-feedback[data-tier="missed"] {
+  color: var(--coral-dark);
+}
+
+.paused-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  color: var(--paper);
+  background: rgba(23, 49, 47, 0.93);
+}
+
+.paused-overlay[hidden] {
+  display: none;
+}
+
+.paused-overlay strong {
+  font-family: "Iowan Old Style", serif;
+  font-size: 2rem;
+}
+
+.summary {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(38px, 8vw, 88px) 24px;
+  text-align: center;
+}
+
+.summary[hidden] {
+  display: none;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--coral-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.summary h1,
+dialog h2 {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+}
+
+.summary h1 {
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+}
+
+.results {
+  margin: 34px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-block: 1px solid var(--line);
+}
+
+.results div {
+  padding: 18px 10px;
+}
+
+.results div + div {
+  border-left: 1px solid var(--line);
+}
+
+.results dt {
+  color: #68716d;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.results dd {
+  margin: 4px 0 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.primary-button {
+  min-height: 46px;
+  padding: 10px 22px;
+  color: #fff;
+  background: var(--coral);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-weight: 800;
+}
+
+.primary-button:active {
+  translate: 2px 2px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+dialog {
+  width: min(680px, calc(100% - 28px));
+  padding: 24px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 9px 9px 0 rgba(0, 0, 0, 0.25);
+}
+
+dialog::backdrop {
+  background: rgba(23, 49, 47, 0.72);
+}
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.input-method-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 22px 0;
+  padding: 14px;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+}
+
+.input-method-toggle span {
+  display: grid;
+  gap: 3px;
+}
+
+.input-method-toggle strong {
+  color: var(--forest);
+  font-size: 0.86rem;
+}
+
+.input-method-toggle small {
+  color: #58635f;
+  font-size: 0.75rem;
+}
+
+.input-method-toggle input {
+  position: relative;
+  width: 42px;
+  height: 22px;
+  flex: 0 0 auto;
+  appearance: none;
+  background: #a9aca5;
+  border: 1px solid #7d827c;
+  border-radius: 11px;
+  cursor: pointer;
+}
+
+.input-method-toggle input::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fffdf8;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+  transition: translate 120ms ease;
+}
+
+.input-method-toggle input:checked {
+  background: var(--forest);
+  border-color: var(--forest);
+}
+
+.input-method-toggle input:checked::before {
+  translate: 20px 0;
+}
+
+.keyboard-map {
+  padding: 14px;
+  overflow-x: auto;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+}
+
+.keyboard-legend {
+  min-width: 500px;
+  margin: 0 0 9px;
+  color: #58635f;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.keyboard-legend span {
+  margin-right: 6px;
+  padding: 2px 5px;
+  color: var(--paper);
+  background: var(--forest);
+}
+
+.keyboard-map div {
+  min-width: 500px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.keyboard-map kbd {
+  position: relative;
+  width: 42px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--forest);
+  background: #fffdf8;
+  border: 1px solid #9c9e94;
+  box-shadow: 0 2px 0 #9c9e94;
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: 1rem;
+}
+
+.keyboard-map kbd::after {
+  content: attr(data-key);
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  color: #6b716d;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 800;
+}
+
+.keyboard-map kbd:has(small) {
+  grid-template-rows: 1fr 1fr;
+  padding: 3px 0;
+}
+
+.keyboard-map kbd small {
+  color: var(--coral-dark);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.keyboard-map kbd span {
+  line-height: 1;
+}
+
+.typing-keyboard {
+  margin-top: 12px;
+  padding: 9px 6px 11px;
+  overflow: hidden;
+  background: #dcebe3;
+  border: 0;
+  border-top: 2px dashed #8ba79c;
+}
+
+.typing-keyboard[hidden] {
+  display: none;
+}
+
+.typing-keyboard div {
+  min-width: 0;
+  gap: clamp(2px, 0.6vw, 5px);
+  margin-top: 4px;
+}
+
+.typing-keyboard kbd {
+  width: min(38px, 8.2%);
+  min-width: 0;
+  color: var(--forest);
+  background: #fff;
+  border-color: #78988f;
+  box-shadow: 0 3px 0 #78988f;
+  font-size: clamp(0.68rem, 2.2vw, 0.95rem);
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, translate 120ms ease;
+}
+
+.typing-keyboard kbd::after {
+  content: none;
+}
+
+.typing-keyboard kbd.is-pressed {
+  color: #fff;
+  background: var(--coral);
+  border-color: var(--coral-dark);
+  box-shadow: 0 1px 0 var(--coral-dark);
+  translate: 0 2px;
+}
+
+.typing-keyboard kbd.is-pressed::after,
+.typing-keyboard kbd.is-pressed small {
+  color: #fff;
+}
+
+.typing-keyboard kbd.is-shifted span {
+  opacity: 0.45;
+}
+
+.typing-keyboard-controls kbd {
+  width: auto;
+  height: 26px;
+  aspect-ratio: auto;
+  padding-inline: 12px;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.typing-keyboard-controls kbd[data-key="Space"] {
+  width: min(210px, 46%);
+}
+
+.typing-keyboard-controls kbd::after {
+  content: none;
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: 100%;
+    padding: 0;
+  }
+
+  .topbar {
+    padding: 10px 14px;
+    align-items: flex-start;
+  }
+
+  .session-controls {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .quiet-button {
+    padding-inline: 7px;
+  }
+
+  .scene {
+    min-height: calc(100vh - 72px);
+    border-width: 2px 0 0;
+    box-shadow: none;
+  }
+
+  .scene-art {
+    height: 168px;
+  }
+
+  .dialogue-stage {
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 16px;
+    padding: 28px 18px;
+  }
+
+  .speaker-portrait {
+    width: 58px;
+    border-width: 3px;
+    font-size: 1.4rem;
+  }
+
+  .target-line {
+    min-height: 58px;
+    font-size: 1.7rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .brand > span:last-child {
+    display: none;
+  }
+
+  .scene-status {
+    padding-inline: 16px;
+  }
+
+  .dialogue-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .speaker {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .speaker-portrait {
+    width: 42px;
+  }
+
+  .results {
+    grid-template-columns: 1fr;
+  }
+
+  .results div + div {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Cafe shift */
+.scene {
+  min-height: min(780px, calc(100vh - 112px));
+}
+
+.cafe-banner {
+  position: relative;
+  height: clamp(180px, 27vh, 250px);
+  overflow: hidden;
+  border-bottom: 2px solid var(--ink);
+  background: #78988f;
+}
+
+.cafe-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(15, 43, 40, 0.2), transparent 42%);
+  pointer-events: none;
+}
+
+.cafe-banner img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.shift-board {
+  position: absolute;
+  z-index: 1;
+  right: clamp(18px, 4vw, 48px);
+  bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, auto) 112px;
+  color: var(--paper);
+  background: rgba(23, 49, 47, 0.95);
+  border: 2px solid var(--paper);
+}
+
+.shift-board div,
+.shift-board time {
+  min-width: 82px;
+  min-height: 58px;
+  padding: 8px 14px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+}
+
+.shift-board div + div,
+.shift-board time {
+  border-left: 1px solid rgba(244, 240, 231, 0.35);
+}
+
+.shift-board span {
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.shift-board strong {
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.35rem;
+}
+
+.shift-board time {
+  color: #fff6de;
+  background: var(--coral-dark);
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  transition: background-color 200ms ease;
+}
+
+.shift-board time.is-urgent {
+  background: #7f201b;
+  animation: clock-pulse 800ms steps(2) infinite;
+}
+
+@keyframes clock-pulse {
+  50% { color: #ffc267; }
+}
+
+.ready-screen {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: clamp(46px, 8vw, 88px) 24px;
+  text-align: center;
+}
+
+.ready-screen[hidden],
+.game-stage[hidden] {
+  display: none;
+}
+
+.ready-screen h1 {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  letter-spacing: 0;
+}
+
+.ready-screen > p:not(.eyebrow) {
+  max-width: 480px;
+  margin: 12px auto 28px;
+  color: #596561;
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.1rem;
+}
+
+.game-stage {
+  min-height: 410px;
+}
+
+.room[hidden] {
+  display: none;
+}
+
+.front-room {
+  min-height: 410px;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.65fr) minmax(360px, 2.35fr);
+}
+
+.front-work-slot {
+  min-width: 0;
+}
+
+.customer-panel,
+.prep-panel {
+  padding: clamp(22px, 3vw, 38px) clamp(16px, 2.5vw, 30px);
+  background: var(--paper-deep);
+}
+
+.customer-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  border-right: 1px solid var(--line);
+}
+
+.customer-portrait {
+  width: min(130px, 100%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--paper);
+  background: #d9573f;
+  border: 5px solid var(--forest);
+  border-radius: 50% 50% 44% 44%;
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: 2.6rem;
+  box-shadow: 7px 7px 0 rgba(23, 49, 47, 0.18);
+}
+
+.customer-portrait[data-color="mint"] { background: #4e897c; }
+.customer-portrait[data-color="gold"] { background: #c18a2f; }
+.customer-portrait[data-color="blue"] { background: #3e7088; }
+.customer-portrait[data-color="rose"] { background: #a95a68; }
+.customer-portrait[data-color="green"] { background: #557a52; }
+
+.panel-label,
+.task-cue {
+  margin: 0 0 5px;
+  color: var(--coral-dark);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.customer-panel h2 {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: 1.35rem;
+}
+
+.customer-dialogue {
+  width: min(100%, 520px);
+  margin: 8px auto 26px;
+  padding: 18px 22px;
+  display: grid;
+  gap: 6px;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--coral);
+  text-align: center;
+}
+
+.customer-dialogue[hidden] {
+  display: none;
+}
+
+.customer-line {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.customer-translation {
+  margin: 0;
+  color: #68716d;
+  font-family: "Iowan Old Style", serif;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.front-room .translation {
+  display: none;
+}
+
+.work-panel {
+  min-width: 0;
+  padding: clamp(26px, 4vw, 48px);
+}
+
+.work-panel .target-line {
+  min-height: 86px;
+  font-size: clamp(1.55rem, 3.3vw, 2.7rem);
+}
+
+.barista-bubble {
+  margin-top: 26px;
+  padding: 12px 15px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  color: var(--paper);
+  background: var(--forest);
+  border-left: 5px solid var(--mint);
+}
+
+.barista-bubble span {
+  color: #aad4c5;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.barista-bubble p {
+  margin: 0;
+  font-family: "Apple SD Gothic Neo", sans-serif;
+}
+
+.prep-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  border-left: 1px solid var(--line);
+}
+
+.front-order-slot {
+  width: min(100%, 430px);
+  margin: 8px auto 0;
+}
+
+.recipe-card {
+  width: 100%;
+  padding: 14px;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+}
+
+.recipe-card h3 {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", serif;
+  font-size: 1rem;
+}
+
+.recipe-list {
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  list-style: none;
+}
+
+.recipe-list li {
+  min-height: 34px;
+  padding: 6px 8px;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: center;
+  gap: 8px;
+  color: #6e7571;
+  background: var(--paper-deep);
+  border-left: 4px solid #a8aaa2;
+  font-size: 0.75rem;
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.recipe-list li span {
+  width: 22px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  color: var(--paper);
+  background: #7d827c;
+  font-family: monospace;
+  font-size: 0.68rem;
+}
+
+.recipe-list li[data-action="cup"],
+.recipe-list li[data-action="mug"],
+.recipe-list li[data-action="clear-cup"] { border-color: #7d827c; }
+.recipe-list li[data-action="coffee"] { border-color: #674331; }
+.recipe-list li[data-action="water"] { border-color: #4b88a2; }
+.recipe-list li[data-action="milk"] { border-color: #d1ad69; }
+.recipe-list li[data-action="ice"] { border-color: #76b8bf; }
+
+.recipe-list li.is-active {
+  color: var(--forest);
+  background: #f4dfc3;
+  box-shadow: inset 0 0 0 2px var(--coral);
+}
+
+.recipe-list li.is-active span {
+  background: var(--coral-dark);
+}
+
+.recipe-list li.is-complete {
+  color: #386456;
+  background: #dcebe3;
+  border-color: #3f7b68;
+}
+
+.recipe-list li.is-complete span {
+  color: transparent;
+  background: #3f7b68;
+}
+
+.recipe-list li.is-complete span::after {
+  content: "OK";
+  color: #fff;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.order-ticket {
+  width: 100%;
+  min-height: 150px;
+  padding: 18px 14px 24px;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  background:
+    repeating-linear-gradient(transparent 0 27px, rgba(75, 136, 162, 0.22) 27px 28px),
+    #fffdf8;
+  border: 1px solid #bbb5a8;
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 94% 100%, 88% 92%, 82% 100%, 76% 92%, 70% 100%, 64% 92%, 58% 100%, 52% 92%, 46% 100%, 40% 92%, 34% 100%, 28% 92%, 22% 100%, 16% 92%, 10% 100%, 5% 92%, 0 100%);
+  text-align: center;
+}
+
+.order-ticket span {
+  color: #7a7d76;
+  font-family: monospace;
+  font-size: 0.65rem;
+}
+
+.order-ticket strong {
+  min-height: 70px;
+  padding-top: 12px;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  color: var(--forest);
+  font-family: "Apple SD Gothic Neo", "Iowan Old Style", serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.order-ticket strong .order-drink-name {
+  color: #747b76;
+  font-family: "Apple SD Gothic Neo", "Iowan Old Style", serif;
+  font-size: 0.78em;
+  line-height: 1.35;
+}
+
+.order-ticket strong .order-drink-name.is-primary {
+  color: var(--forest);
+  font-size: 1em;
+}
+
+.order-ticket strong[hidden] {
+  display: none;
+}
+
+.order-ticket .input-wrap {
+  margin-top: 5px;
+}
+
+.order-ticket .input-label {
+  color: #69736f;
+  text-align: left;
+}
+
+.order-ticket .input-row {
+  grid-template-columns: 1fr;
+}
+
+.order-ticket .input-row #typing-input {
+  min-height: 68px;
+  padding: 8px 4px 5px;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid rgba(75, 136, 162, 0.4);
+  font-family: "Apple SD Gothic Neo", "Iowan Old Style", serif;
+  font-size: 1.2rem;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.order-ticket .input-row #typing-input:focus {
+  outline: 2px solid var(--coral);
+  outline-offset: 3px;
+}
+
+.order-ticket .say-button {
+  min-height: 42px;
+  margin-top: 9px;
+}
+
+.order-ticket .composition-state {
+  color: #68716d;
+}
+
+.kitchen-order-slot {
+  width: 165px;
+  position: absolute;
+  top: 13px;
+  right: 14px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.kitchen-order-slot .order-ticket {
+  min-height: 100px;
+  padding: 12px 10px 18px;
+  box-shadow: 5px 6px 0 rgba(23, 49, 47, 0.2);
+  rotate: 2deg;
+}
+
+.kitchen-order-slot .order-ticket strong {
+  min-height: 45px;
+  padding-top: 5px;
+  font-size: 0.88rem;
+}
+
+.cup {
+  width: min(145px, 90%);
+  filter: drop-shadow(7px 9px 0 rgba(23, 49, 47, 0.17));
+}
+
+.cup-lid {
+  width: 110%;
+  height: 18px;
+  margin-left: -5%;
+  background: var(--forest);
+  border: 2px solid var(--ink);
+}
+
+.cup-body {
+  min-height: 185px;
+  padding: 24px 10px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fffdf8;
+  border: 2px solid var(--ink);
+  border-top: 0;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+}
+
+.cup-logo {
+  width: 46px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+  color: var(--paper);
+  background: var(--coral);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.cup-body strong,
+.cup-body small {
+  max-width: 110px;
+  overflow-wrap: anywhere;
+  color: #315b52;
+  font-family: "Apple SD Gothic Neo", cursive;
+  text-align: center;
+}
+
+.cup-body strong {
+  font-size: 1rem;
+}
+
+.cup-body small {
+  margin-top: 6px;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.kitchen-room {
+  min-height: 520px;
+  position: relative;
+  padding: clamp(22px, 4vw, 42px);
+  background:
+    linear-gradient(90deg, rgba(23, 49, 47, 0.07) 1px, transparent 1px) 0 0 / 30px 30px,
+    linear-gradient(rgba(23, 49, 47, 0.07) 1px, transparent 1px) 0 0 / 30px 30px,
+    #cfd8d1;
+}
+
+.kitchen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--forest);
+}
+
+.kitchen-header h2 {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: clamp(1.55rem, 3vw, 2.4rem);
+}
+
+.recipe-book-button {
+  flex: 0 0 auto;
+}
+
+.kitchen-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(210px, 0.7fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.tool-bench {
+  min-height: 540px;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.28) 1px, transparent 1px),
+    #9bbdb4;
+  background-size: 34px 34px;
+  border: 3px solid var(--forest);
+  isolation: isolate;
+}
+
+.tool-bench::before {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 88px;
+  z-index: -1;
+  background: #d5a56a;
+  border-top: 12px solid #7a5035;
+  box-shadow: inset 0 12px 0 rgba(255, 255, 255, 0.18);
+  content: "";
+}
+
+.counter-hint {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  margin: 0;
+  padding: 6px 9px;
+  color: var(--forest);
+  background: rgba(255, 253, 248, 0.82);
+  font-size: 0.67rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tool-button {
+  width: 12%;
+  min-width: 62px;
+  height: 150px;
+  padding: 0;
+  position: absolute;
+  bottom: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  color: var(--forest);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  font-size: 0.75rem;
+}
+
+.tool-button img {
+  width: 100%;
+  height: 116px;
+  object-fit: contain;
+  filter: drop-shadow(4px 6px 0 rgba(23, 49, 47, 0.18));
+  transform-origin: bottom center;
+  transition: filter 140ms ease, transform 140ms ease;
+}
+
+.tool-phrase {
+  width: max-content;
+  max-width: 190px;
+  padding: 9px 12px;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  z-index: 5;
+  color: var(--ink);
+  background: #fffdf8;
+  border: 2px solid var(--forest);
+  box-shadow: 4px 4px 0 rgba(23, 49, 47, 0.2);
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.25;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  translate: -50% 5px;
+  transition: opacity 120ms ease, translate 120ms ease;
+}
+
+.tool-phrase::after {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  bottom: -7px;
+  left: calc(50% - 6px);
+  background: #fffdf8;
+  border-right: 2px solid var(--forest);
+  border-bottom: 2px solid var(--forest);
+  rotate: 45deg;
+  content: "";
+}
+
+.tool-button strong {
+  padding: 3px 6px;
+  background: rgba(255, 253, 248, 0.86);
+  font-size: 0.65rem;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.tool-button:hover img,
+.tool-button:focus-visible img {
+  filter: drop-shadow(0 0 0.55rem #fffdf8) drop-shadow(4px 7px 0 rgba(23, 49, 47, 0.22));
+  transform: translateY(-5px);
+}
+
+.tool-button:focus-visible {
+  outline: 0;
+}
+
+.tool-button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.75);
+  opacity: 0.45;
+  translate: none;
+}
+
+.tool-button.is-selected img {
+  filter: drop-shadow(0 0 0.75rem #f2a65a) drop-shadow(4px 7px 0 rgba(23, 49, 47, 0.2));
+  transform: translateY(-7px) scale(1.04);
+}
+
+.tool-button.is-selected .tool-phrase {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+.tool-coffee { left: 2%; width: 20%; }
+.tool-mug { left: 25%; width: 11%; }
+.tool-glass { left: 39%; width: 10%; }
+.tool-hot-water { left: 53%; width: 13%; }
+.tool-sink { right: 1%; width: 22%; }
+
+.category-tool {
+  width: 17%;
+  height: 132px;
+  bottom: 245px;
+}
+
+.category-tool img {
+  height: 96px;
+}
+
+.tool-tea { left: 4%; }
+.tool-syrup { left: 25%; }
+.tool-fridge { left: 46%; }
+.tool-extras { left: 67%; }
+
+.kitchen-console {
+  min-width: 0;
+  margin: 0;
+  background: var(--paper);
+  border: 2px solid var(--forest);
+  box-shadow: 6px 6px 0 rgba(23, 49, 47, 0.2);
+}
+
+.kitchen-action-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(23, 49, 47, 0.56);
+}
+
+.kitchen-action-overlay[hidden] {
+  display: none;
+}
+
+.kitchen-action-dialog {
+  width: min(620px, 100%);
+  position: relative;
+}
+
+.popup-close {
+  width: 38px;
+  height: 38px;
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: var(--paper);
+  background: var(--coral-dark);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.popup-close[hidden] {
+  display: none;
+}
+
+.serve-drink-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 18px;
+  color: var(--paper);
+  background: var(--coral);
+  border: 2px solid var(--paper);
+  font-weight: 800;
+}
+
+.serve-drink-button:disabled {
+  color: #aebdb7;
+  background: #31524c;
+  border-color: #6e8780;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.kitchen-console .work-panel {
+  padding: 24px;
+}
+
+.kitchen-console .target-line[hidden] {
+  display: none;
+}
+
+.kitchen-console .translation {
+  min-height: 24px;
+  font-style: normal;
+}
+
+.kitchen-status {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-height: 100%;
+  padding: 18px;
+  background: #25423e;
+  border: 2px solid var(--ink);
+  color: var(--paper);
+}
+
+.kitchen-status .panel-label {
+  color: #f2a65a;
+}
+
+.kitchen-cup {
+  width: 94px;
+  height: 112px;
+  margin: 18px auto 22px;
+  position: relative;
+  color: var(--paper);
+  background: rgba(255, 255, 255, 0.35);
+  border: 3px solid var(--paper);
+  font-size: 1.4rem;
+  font-weight: 800;
+  transition: width 180ms ease, height 180ms ease, opacity 180ms ease;
+}
+
+.kitchen-cup.is-empty {
+  border-style: dashed;
+  opacity: 0.2;
+}
+
+.kitchen-cup.is-glass {
+  overflow: hidden;
+  clip-path: polygon(6% 0, 94% 0, 82% 100%, 18% 100%);
+}
+
+.kitchen-cup.is-mug {
+  width: 106px;
+  height: 92px;
+  margin-top: 38px;
+  border-radius: 3px 3px 14px 14px;
+}
+
+.kitchen-cup.is-mug::after {
+  position: absolute;
+  top: 18px;
+  right: -26px;
+  width: 24px;
+  height: 42px;
+  border: 7px solid var(--paper);
+  border-left: 0;
+  border-radius: 0 18px 18px 0;
+  content: "";
+}
+
+.drink-fill {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  left: 3px;
+  height: 0;
+  background: transparent;
+  border-radius: 0 0 9px 9px;
+  transition: height 240ms ease, background-color 240ms ease;
+}
+
+.kitchen-cup.has-coffee .drink-fill {
+  height: 56%;
+  background: #57331f;
+}
+
+.kitchen-cup.has-water .drink-fill {
+  height: 58%;
+  background: #8fc4cf;
+}
+
+.kitchen-cup.has-sparkling-water .drink-fill {
+  height: 72%;
+  background: #d8eef0;
+}
+
+.kitchen-cup.has-milk .drink-fill {
+  height: 62%;
+  background: #ead9b4;
+}
+
+.kitchen-cup.has-coffee.has-water .drink-fill {
+  height: 74%;
+  background: #76513d;
+}
+
+.kitchen-cup.has-coffee.has-milk .drink-fill {
+  height: 78%;
+  background: #b98f68;
+}
+
+.kitchen-cup.has-tea .drink-fill {
+  height: 72%;
+  background: #b98245;
+}
+
+.kitchen-cup.has-green-tea .drink-fill,
+.kitchen-cup.has-matcha .drink-fill {
+  background: #7d9f63;
+}
+
+.kitchen-cup.has-hibiscus .drink-fill,
+.kitchen-cup.has-peach-tea .drink-fill {
+  background: #c76e77;
+}
+
+.kitchen-cup.has-yuja .drink-fill {
+  background: #d6ac4d;
+}
+
+.kitchen-cup.has-milk .drink-fill {
+  height: 78%;
+}
+
+.kitchen-cup.has-syrup .drink-fill {
+  box-shadow: inset 0 -12px rgba(137, 66, 54, 0.5);
+}
+
+.kitchen-cup.has-sparkling-water.has-strawberry-syrup .drink-fill {
+  background: #e98d9a;
+}
+
+.kitchen-cup.has-sparkling-water.has-lemon-syrup .drink-fill {
+  background: #f2d86e;
+}
+
+.kitchen-cup.has-sparkling-water.has-green-grape-syrup .drink-fill {
+  background: #a9d879;
+}
+
+.kitchen-cup.has-sparkling-water.has-grapefruit-syrup .drink-fill {
+  background: #ed8a76;
+}
+
+.kitchen-cup.has-sparkling-water.has-peach-syrup .drink-fill {
+  background: #efad82;
+}
+
+.kitchen-cup.has-whipped-cream .drink-fill::after {
+  width: 82%;
+  height: 16px;
+  position: absolute;
+  top: -9px;
+  left: 9%;
+  background: #fff9e9;
+  border-radius: 50% 50% 35% 35%;
+  content: "";
+}
+
+.kitchen-cup.has-lemon .drink-fill::before {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  z-index: 2;
+  background: #f2ce52;
+  border: 2px solid #fff3a6;
+  border-radius: 50%;
+  content: "";
+}
+
+.ice-cubes {
+  display: none;
+  position: absolute;
+  right: 18px;
+  bottom: 49px;
+  left: 18px;
+  z-index: 2;
+  justify-content: space-between;
+}
+
+.has-ice .ice-cubes {
+  display: flex;
+}
+
+.ice-cubes i {
+  width: 18px;
+  height: 18px;
+  display: block;
+  background: rgba(229, 249, 250, 0.8);
+  border: 2px solid #74aeb5;
+  rotate: 8deg;
+}
+
+.ice-cubes i:nth-child(2) {
+  translate: 0 8px;
+  rotate: -12deg;
+}
+
+.kitchen-cup-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  translate: -50% -50%;
+  text-shadow: 0 1px 2px rgba(23, 49, 47, 0.45);
+}
+
+#kitchen-progress {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+  list-style: none;
+}
+
+#kitchen-progress li {
+  padding: 8px;
+  color: var(--forest);
+  background: #dcebe3;
+  border-left: 4px solid var(--mint);
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: 0.78rem;
+}
+
+#kitchen-progress li.is-wrong {
+  color: #7f201b;
+  background: #f3d6cf;
+  border-color: var(--coral);
+  text-decoration: line-through;
+}
+
+.trash-tool:not(:disabled) {
+  border-color: var(--coral-dark);
+}
+
+.recipe-dialog {
+  width: min(620px, calc(100% - 28px));
+}
+
+.recipe-book {
+  margin-top: 22px;
+  min-height: 350px;
+  padding: 28px 34px;
+  background: #fffdf8;
+  border: 1px solid #c8b99e;
+  box-shadow: inset 12px 0 0 #efe4ce, 5px 6px 0 rgba(23, 49, 47, 0.14);
+}
+
+.recipe-book section {
+  padding-top: 14px;
+  border-top: 5px solid var(--coral);
+}
+
+.recipe-book h3 {
+  margin: 0;
+  color: var(--forest);
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.55rem;
+}
+
+.recipe-korean-name {
+  margin: 3px 0 18px;
+  color: var(--forest);
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.recipe-lock {
+  margin-top: 70px;
+  color: #68716d;
+  font-weight: 800;
+  text-align: center;
+}
+
+.recipe-book ol {
+  margin: 0;
+  padding-left: 24px;
+}
+
+.recipe-book li {
+  margin-top: 8px;
+  padding-left: 4px;
+}
+
+.recipe-book li strong,
+.recipe-book li span {
+  display: block;
+}
+
+.recipe-book li strong {
+  color: var(--forest);
+  font-family: "Apple SD Gothic Neo", sans-serif;
+}
+
+.recipe-book li span {
+  color: #68716d;
+  font-size: 0.75rem;
+}
+
+.recipe-pagination {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 12px;
+  color: var(--forest);
+  font-weight: 800;
+  text-align: center;
+}
+
+.recipe-pagination button {
+  width: 44px;
+  height: 40px;
+  padding: 0;
+  color: var(--paper);
+  background: var(--forest);
+  border: 0;
+  font-size: 1.2rem;
+}
+
+.recipe-pagination button:disabled {
+  opacity: 0.35;
+}
+
+.ingredient-dialog {
+  width: min(620px, calc(100% - 28px));
+}
+
+.ingredient-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ingredient-option {
+  min-height: 70px;
+  padding: 12px 14px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  color: var(--forest);
+  background: #fffdf8;
+  border: 2px solid #78988f;
+  box-shadow: 0 3px 0 #78988f;
+  text-align: left;
+}
+
+.ingredient-option:hover,
+.ingredient-option:focus-visible {
+  background: #dcebe3;
+  border-color: var(--forest);
+}
+
+.ingredient-option strong {
+  font-family: "Apple SD Gothic Neo", sans-serif;
+  font-size: 1rem;
+}
+
+.ingredient-option span {
+  color: #68716d;
+  font-size: 0.75rem;
+}
+
+.order-outcome {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 32px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  overflow: hidden;
+  color: var(--forest);
+  background: rgba(244, 240, 231, 0.96);
+  text-align: center;
+}
+
+.order-outcome[hidden] {
+  display: none;
+}
+
+.order-outcome h2 {
+  margin: 0;
+  font-family: "Iowan Old Style", "Apple SD Gothic Neo", serif;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  letter-spacing: 0;
+}
+
+.order-outcome > p:not(.eyebrow) {
+  margin: 10px 0 28px;
+  color: #58635f;
+  font-family: "Iowan Old Style", serif;
+  font-size: 1.1rem;
+}
+
+.order-outcome[data-result="success"] h2 {
+  color: #2c7059;
+}
+
+.order-outcome[data-result="failure"] {
+  color: #7f201b;
+  background: rgba(244, 231, 226, 0.97);
+}
+
+.order-outcome[data-result="failure"] .confetti {
+  display: none;
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti i {
+  position: absolute;
+  top: -24px;
+  left: var(--left);
+  width: 12px;
+  height: 30px;
+  background: var(--color);
+  border: 2px solid var(--ink);
+  rotate: var(--tilt);
+  animation: confetti-drop 1.7s ease-out infinite;
+  animation-delay: var(--delay);
+}
+
+.confetti i:nth-child(1) { --left: 8%; --color: #d9573f; --tilt: 18deg; --delay: -0.3s; }
+.confetti i:nth-child(2) { --left: 20%; --color: #f0b45f; --tilt: -12deg; --delay: -1.1s; }
+.confetti i:nth-child(3) { --left: 34%; --color: #4e897c; --tilt: 28deg; --delay: -0.7s; }
+.confetti i:nth-child(4) { --left: 47%; --color: #d9573f; --tilt: -22deg; --delay: -1.5s; }
+.confetti i:nth-child(5) { --left: 60%; --color: #3e7088; --tilt: 12deg; --delay: -0.9s; }
+.confetti i:nth-child(6) { --left: 72%; --color: #f0b45f; --tilt: -30deg; --delay: -0.1s; }
+.confetti i:nth-child(7) { --left: 84%; --color: #4e897c; --tilt: 20deg; --delay: -1.3s; }
+.confetti i:nth-child(8) { --left: 94%; --color: #d9573f; --tilt: -8deg; --delay: -0.5s; }
+
+@keyframes confetti-drop {
+  0% { translate: 0 -20px; }
+  100% { translate: 20px 820px; rotate: 220deg; }
+}
+
+@media (max-width: 820px) {
+  .shift-board {
+    right: 16px;
+  }
+
+  .front-room {
+    grid-template-columns: 130px minmax(0, 1fr);
+  }
+
+  .customer-panel {
+    padding-inline: 14px;
+  }
+
+  .customer-portrait {
+    width: 86px;
+    font-size: 1.8rem;
+  }
+
+  .prep-panel {
+    grid-column: 1 / -1;
+    padding: 18px;
+    flex-direction: row;
+    justify-content: center;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .order-ticket { max-width: 430px; }
+  .recipe-card { max-width: 240px; }
+  .cup { width: 90px; }
+  .cup-body { min-height: 120px; padding-top: 12px; }
+  .cup-logo { width: 30px; margin-bottom: 8px; }
+
+  .kitchen-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .kitchen-status {
+    grid-column: 1;
+    grid-row: auto;
+    min-height: 0;
+  }
+
+  .kitchen-cup {
+    width: 68px;
+    height: 78px;
+    margin-block: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .session-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .cafe-banner {
+    height: 190px;
+  }
+
+  .location-stamp {
+    top: 14px;
+    bottom: auto;
+  }
+
+  .shift-board {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    grid-template-columns: repeat(2, 1fr) 1.2fr;
+  }
+
+  .shift-board div,
+  .shift-board time {
+    min-width: 0;
+    padding-inline: 7px;
+  }
+
+  .front-room {
+    grid-template-columns: 1fr;
+  }
+
+  .customer-panel {
+    padding: 16px 18px;
+    flex-direction: row;
+    text-align: left;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .customer-portrait {
+    width: 62px;
+    flex: 0 0 auto;
+  }
+
+  .work-panel {
+    padding: 26px 18px;
+  }
+
+  .work-panel .target-line {
+    min-height: 72px;
+    font-size: 1.65rem;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .input-row #typing-input {
+    border-right: 2px solid var(--forest);
+  }
+
+  .say-button {
+    min-height: 44px;
+  }
+
+  .prep-panel {
+    flex-wrap: wrap;
+  }
+
+  .kitchen-room {
+    padding: 18px 14px 26px;
+  }
+
+  .kitchen-header {
+    align-items: flex-start;
+  }
+
+  .tool-bench {
+    min-height: 680px;
+    padding: 118px 7px 24px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(3, 170px);
+    align-content: end;
+    align-items: end;
+    gap: 18px 2px;
+    overflow: visible;
+  }
+
+  .tool-bench::before {
+    height: 66px;
+    box-shadow: 0 -218px 0 #d5a56a;
+  }
+
+  .counter-hint {
+    right: 8px;
+    left: 8px;
+    text-align: center;
+  }
+
+  .kitchen-order-slot {
+    width: 145px;
+    top: 52px;
+    right: 10px;
+  }
+
+  .tool-button,
+  .tool-coffee,
+  .tool-mug,
+  .tool-glass,
+  .tool-milk,
+  .tool-hot-water,
+  .tool-sink,
+  .category-tool,
+  .tool-tea,
+  .tool-syrup,
+  .tool-fridge,
+  .tool-extras {
+    width: 100%;
+    min-width: 0;
+    height: 168px;
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+
+  .tool-coffee {
+    grid-column: span 2;
+  }
+
+  .category-tool {
+    height: 150px;
+  }
+
+  .tool-tea { grid-column: 1; grid-row: 1; }
+  .tool-syrup { grid-column: 2; grid-row: 1; }
+  .tool-fridge { grid-column: 3; grid-row: 1; }
+  .tool-extras { grid-column: 4; grid-row: 1; }
+
+  .tool-button img {
+    height: 125px;
+  }
+
+  .tool-phrase {
+    max-width: 150px;
+    font-size: 0.82rem;
+  }
+
+  .recipe-book {
+    min-height: 330px;
+    padding: 22px;
+  }
+
+  .ingredient-grid {
+    grid-template-columns: 1fr;
+  }
+}
